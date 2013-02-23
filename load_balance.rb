@@ -6,10 +6,11 @@ require_relative 'book'
 
 class Load_Balance
 
-  attr_reader :servers, :server_list, :client_list
+  attr_reader :port, :servers, :server_list, :client_list
 
   #construtor
-  def initialize(online_servers, able_servers, client_list)
+  def initialize(port, online_servers, able_servers, client_list)
+    @port = port
     @servers = servers
     @server_list = server_list
     @client_list = client_list
