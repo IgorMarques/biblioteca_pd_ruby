@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class Library
 
   attr_reader :librarians, :associates, :books

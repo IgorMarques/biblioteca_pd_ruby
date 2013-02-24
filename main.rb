@@ -4,10 +4,12 @@ require_relative 'librarian'
 require_relative 'associate'
 require_relative 'book'
 require_relative 'server'
+require_relative 'library'
+require_relative 'network/message'
 
-bibliotecario1 = Librarian.new("Mayane", "password")
-bibliotecario2 = Librarian.new("Igor", "password")
-bibliotecario3 = Librarian.new("Joaquim", "password")
+bibliotecario1 = Librarian.new(9090,"Mayane", "password")
+bibliotecario2 = Librarian.new(9090,"Igor", "password")
+bibliotecario3 = Librarian.new(9090,"Joaquim", "password")
 
 bibliotecarios = [bibliotecario1, bibliotecario2, bibliotecario3]
 
@@ -23,4 +25,12 @@ socio3 = Associate.new("Luizinho", livro1)
 
 socios= [socio1,socio2, socio3]
 
-server = Server.new(bibliotecarios,socios, nil, livros)
+library = Library.new(bibliotecarios,socios,livros)
+
+usuario= ["usuário", "senha", "nome da mae"]
+
+message = Message.new("C", "VI", usuario)
+
+puts message.to_string
+
+puts message.host_type
