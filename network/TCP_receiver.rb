@@ -12,6 +12,8 @@ class TCP_receiver
           message= Message.new
           
           message.string_to_message(line)
+
+          return message
           
         end
         client.close               

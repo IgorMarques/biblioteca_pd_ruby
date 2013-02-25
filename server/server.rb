@@ -11,7 +11,7 @@ class Server
   attr_accessor :port, :online_clients, :library
 
   #construtor
-  def initialize(port, online_clients, library)
+  def initialize(port, online_clients="", library="")
     @port = port
     @online_clients = online_clients
     @library = library
