@@ -1,9 +1,8 @@
 # -*- encoding : utf-8 -*-
 class Librarian
-  attr_reader :port, :name, :password
+  attr_reader :name, :password
 
-  def initialize(port, name, password)
-    @port = port
+  def initialize(name, password)
     @name= name
     @password = password
   end

@@ -22,17 +22,10 @@ class Server
     @online_clients = online_clients 
   end
 
-  def book_collection=(book_collection)
-    @book_collection = book_collection
-  end
-
   def validate_login(librarian)
   end
 
   def validate_logoff(librarian)
-  end
-
-  def update_amout(amount, book)
   end
 
   def validate_loan(book, associate)

@@ -39,5 +39,4 @@ class Library
     return true
   end
 
-
 end
