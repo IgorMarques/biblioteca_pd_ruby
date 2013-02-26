@@ -5,10 +5,6 @@ require_relative 'associate'
 require_relative 'book'
 require_relative 'server'
 require_relative 'library'
-require 'socket' 
-require_relative 'network/message'
-require_relative 'network/connection_receiver'
-#require_relative 'network/connection_sender'
 
 #Instanciadores do "banco de dados"
 bibliotecario1 = Librarian.new(9090,"Mayane", "password")
@@ -37,14 +33,6 @@ port = 7890
 protocol = "TCP"
 
 server = Server.new(port,"",library)
-
-receiver = Connection_receiver.new(port, protocol)
-
-listener = Thread.new {
-  receiver.listening
-}
-
-
 
 #server.notify_aptitude(7888)
 

@@ -6,7 +6,7 @@ class Message_Notifier < Notifier
   include Observable 
 
   def inicialize()
-    add_observer Message_Notifier.new 
+    add_observer #####
   end
 
   def redirect(message)
