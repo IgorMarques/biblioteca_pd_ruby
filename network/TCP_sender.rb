@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 require 'socket' 
 require 'json'
 require_relative "message.rb"

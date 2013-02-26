@@ -5,6 +5,7 @@ require_relative 'associate'
 require_relative 'book'
 require_relative 'server'
 require_relative 'library'
+require_relative 'network/connection_manager'
 
 #Instanciadores do "banco de dados"
 bibliotecario1 = Librarian.new(9090,"Mayane", "password")
@@ -33,6 +34,8 @@ port = 7890
 protocol = "TCP"
 
 server = Server.new(port,"",library)
+
+connection = Connection_Manager.instance
 
 #server.notify_aptitude(7888)
 

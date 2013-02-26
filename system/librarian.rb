@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 class Librarian
   attr_reader :name, :password
 
