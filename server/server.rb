@@ -1,9 +1,9 @@
 # -*- encoding : utf-8 -*-
 
-require_relative 'librarian'
-require_relative 'associate'
-require_relative 'book'
-require_relative 'library'
+require_relative '../system/librarian'
+require_relative '../system/associate'
+require_relative '../system/book'
+require_relative '../system/library'
 
 class Server
 

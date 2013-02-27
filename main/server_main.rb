@@ -1,16 +1,16 @@
 # -*- encoding : utf-8 -*-
 
-require_relative 'librarian'
-require_relative 'associate'
-require_relative 'book'
-require_relative 'server'
-require_relative 'library'
-require_relative 'network/connection_manager'
+require_relative '../system/librarian'
+require_relative '../system/associate'
+require_relative '../system/book'
+require_relative '../system/library'
+require_relative '../network/connection_manager'
+require_relative '../server/server'
 
 #Instanciadores do "banco de dados"
-bibliotecario1 = Librarian.new(9090,"Mayane", "password")
-bibliotecario2 = Librarian.new(9090,"Igor", "password")
-bibliotecario3 = Librarian.new(9090,"Joaquim", "password")
+bibliotecario1 = Librarian.new("Mayane", "password")
+bibliotecario2 = Librarian.new("Igor", "password")
+bibliotecario3 = Librarian.new("Joaquim", "password")
 
 bibliotecarios = [bibliotecario1, bibliotecario2, bibliotecario3]
 

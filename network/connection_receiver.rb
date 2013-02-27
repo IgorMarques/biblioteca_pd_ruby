@@ -11,7 +11,7 @@ class Connection_receiver
   end
 
   def listening
-    if protocol == "TCP"
+    if self.protocol == "TCP"
       tcp_receiver = TCP_receiver.new
       tcp_receiver.listening(@port)
     end

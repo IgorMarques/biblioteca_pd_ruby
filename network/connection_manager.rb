@@ -6,7 +6,7 @@ require_relative 'connection_receiver'
 require "singleton"  
 #require_relative 'network/connection_sender'
 
-def Connection_Manager
+class Connection_Manager
 
   include Singleton
 
