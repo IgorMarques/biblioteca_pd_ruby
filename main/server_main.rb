@@ -35,7 +35,11 @@ protocol = "TCP"
 
 server = Server.new(port,"",library)
 
-connection = Connection_Manager.instance
+connection = Connection_Manager.instance(port, protocol)
+
+Thread.new{
+  connection.listen
+}
 
 #server.notify_aptitude(7888)
 

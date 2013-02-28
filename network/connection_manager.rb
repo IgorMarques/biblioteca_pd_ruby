@@ -10,12 +10,16 @@ class Connection_Manager
 
   include Singleton
 
-  def star_listening
-    receiver = Connection_receiver.new(port, protocol)
-
-    listener = Thread.new {
-      receiver.listening
-    }
+  def inicialize(port, protocol) 
+    @port=port
+    @protocol=protocol
+  end
+  
+  def listen
+    receiver = Connection_receiver.new(@port, @protocol)
+    
+    receiver.listening
+    
   end
 
   def message_received(message)

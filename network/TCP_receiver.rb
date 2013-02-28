@@ -8,14 +8,14 @@ class TCP_receiver
 
   include Observable 
 
-  def inicialize()
-    add_observer Message_Notifier.new 
+  def inicialize(port)
+    socket = TCPServer.open(port) 
+    add_observer Connection_manager.new 
   end
 
-  def listening(port)
-  socket = TCPServer.open(port) 
+  def listening
     loop {
-      Thread.start(socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
+      Thread.start(self.socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
 
         while line = client.gets  #enquanto estiver ouvindo
 
