@@ -2,28 +2,32 @@
 
 require 'socket' 
 require_relative 'message'
-require_relative 'connection_receiver'
-require "singleton"  
-#require_relative 'network/connection_sender'
+require_relative 'TCP_connection'
 
 class Connection_Manager
 
-  include Singleton
-
-  def inicialize(port, protocol) 
+  def initialize(port, protocol, hostname) 
     @port=port
     @protocol=protocol
-  end
-  
-  def listen
-    receiver = Connection_receiver.new(@port, @protocol)
-    
-    receiver.listening
-    
+    if protocol == "TCP"
+      @connection = TCP_connection.new(port, hostname)
+    end
   end
 
-  def message_received(message)
-    ###manipula a mensagem
+  def send_message(message)
+    self.connection.send_message(message)
+  end
+
+  def listen
+    self.conenction.listen    
+  end
+
+  def receive_message(message)
+    self.connection.receive_message
+  end
+
+  def close
+    self.connection.close
   end
 
 end

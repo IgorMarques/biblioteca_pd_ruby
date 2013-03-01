@@ -32,14 +32,13 @@ library = Library.new(bibliotecarios,socios,livros)
 
 port = 7890
 protocol = "TCP"
+hostname = "localhost"
 
 server = Server.new(port,"",library)
 
-connection = Connection_Manager.instance(port, protocol)
+connection = Connection_Manager.new(port, protocol, hostname)
 
-Thread.new{
-  connection.listen
-}
+connection.listen
 
 #server.notify_aptitude(7888)
 

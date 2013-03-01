@@ -2,7 +2,7 @@
 
 require 'socket' 
 
-class TCP_sender 
+class TCP_connection
 
   def initialize (port, hostname)
     @socket = TCPSocket.open(hostname, port)
@@ -18,6 +18,26 @@ class TCP_sender
   end
 
   def listen
+     server_socket = TCPServer.open(self.port) 
+
+     loop {
+      Thread.start(self.server_socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
+
+        while line = client.gets  #enquanto estiver ouvindo
+
+          message= Message.new
+          
+          message.string_to_message(line)
+
+          #notify_observers(message)
+
+          puts message
+          
+        end
+        client.close               
+      end
+    }
+
   end
 
   def close
