@@ -17,13 +17,17 @@ class TCP_receiver
     loop {
       Thread.start(self.socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
 
+        connection = Connection_Manager.new(port, protocol, hostname)
+
         while line = client.gets  #enquanto estiver ouvindo
 
           message= Message.new
           
           message.string_to_message(line)
 
-          notify_observers(message)
+          ###PROCESSAR MENSAGENS POR MAGIA####
+
+          #notify_observers(message)
           
         end
         client.close               
