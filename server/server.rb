@@ -46,6 +46,8 @@ class Server
         end
       }
       elsif protocol == "UDP"
+
+        ##falta implementar multithread##
         client = UDPSocket.new
         client.bind('0.0.0.0', @port)
         data, addr = client.recvfrom(@port) # if this number is too low it will drop the larger packets and never give them to you
