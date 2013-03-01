@@ -6,12 +6,19 @@ require_relative '../server/client'
 
 bibliotecario = Librarian.new("Igor", "password")
 
-port = 7891
-protocol = "TCP"
+origin_port = 7891
+destiny_port = 7890
+protocol = "UDP"
 hostname = "localhost"
 
-client = Client.new(port, bibliotecario)
+client = Client.new(origin_port, bibliotecario)
 
-connection = Connection_Manager.new(port, protocol, hostname)
+connection = Connection_Manager.new(destiny_port, protocol, hostname)
 
 connection.send_message("hello world!")
+
+puts connection.receive_message
+
+loop{
+
+}

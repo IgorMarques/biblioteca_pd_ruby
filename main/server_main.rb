@@ -31,14 +31,14 @@ library = Library.new(bibliotecarios,socios,livros)
 #fim dos Instanciadores do "banco de dados"
 
 port = 7890
-protocol = "TCP"
+protocol = "UDP"
 hostname = "localhost"
 
 server = Server.new(port,"",library)
 
 #connection = Connection_Manager.new(port, protocol, hostname)
 
-server.listen(port)
+server.listen(port, protocol)
 
 #server.notify_aptitude(7888)
 

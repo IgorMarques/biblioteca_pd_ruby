@@ -8,13 +8,12 @@ class TCP_connection
     @socket = TCPSocket.open(hostname, port)
   end
 
-  def send_message (message)
-    self.socket.puts message.to_string
+  def send_message(message)
+    @socket.puts message#.to_string
   end
 
   def receive_message
-    message self.socket.gets 
-    ##REPASSAR A MSG##
+    @socket.gets 
   end
 
 =begin
@@ -42,7 +41,7 @@ class TCP_connection
   end
 =end
   def close
-     self.socket.close 
+     @socket.close 
   end
 
 end

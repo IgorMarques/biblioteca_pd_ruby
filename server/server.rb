@@ -22,30 +22,38 @@ class Server
     @online_clients = online_clients 
   end
 
-  def listen_connection(port, protocol)
+  def listen(port, protocol)
 
     if protocol === "TCP"
 
       server_socket = TCPServer.open(self.port) 
 
        loop {
-        Thread.start(self.server_socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
+        Thread.start(server_socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
 
           while line = client.gets  #enquanto estiver ouvindo
 
             message= Message.new
             
-            message.string_to_message(line)
+            message.string_to_message(line) 
 
-            #notify_observers(message)
+            puts line
 
-            puts message
-            
+            client.puts "oi"
+      
           end
-          client.close               
+          #client.close               
         end
-      else
-        ####UDP
+      }
+      elsif protocol == "UDP"
+        client = UDPSocket.new
+        client.bind('0.0.0.0', @port)
+        data, addr = client.recvfrom(@port) # if this number is too low it will drop the larger packets and never give them to you
+        
+        puts data
+
+      else 
+        puts "--Protocolo inválido!--"
       end
   end
 
