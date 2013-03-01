@@ -22,6 +22,33 @@ class Server
     @online_clients = online_clients 
   end
 
+  def listen_connection(port, protocol)
+
+    if protocol === "TCP"
+
+      server_socket = TCPServer.open(self.port) 
+
+       loop {
+        Thread.start(self.server_socket.accept) do |client| #abre uma thread para um cliente quando recebe solicitacao
+
+          while line = client.gets  #enquanto estiver ouvindo
+
+            message= Message.new
+            
+            message.string_to_message(line)
+
+            #notify_observers(message)
+
+            puts message
+            
+          end
+          client.close               
+        end
+      else
+        ####UDP
+      end
+  end
+
   def validate_login(librarian)
   end
 

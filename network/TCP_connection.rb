@@ -17,6 +17,7 @@ class TCP_connection
     ##REPASSAR A MSG##
   end
 
+=begin
   def listen
      server_socket = TCPServer.open(self.port) 
 
@@ -39,7 +40,7 @@ class TCP_connection
     }
 
   end
-
+=end
   def close
      self.socket.close 
   end

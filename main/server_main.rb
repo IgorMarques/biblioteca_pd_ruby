@@ -36,9 +36,9 @@ hostname = "localhost"
 
 server = Server.new(port,"",library)
 
-connection = Connection_Manager.new(port, protocol, hostname)
+#connection = Connection_Manager.new(port, protocol, hostname)
 
-connection.listen
+server.listen(port)
 
 #server.notify_aptitude(7888)
 

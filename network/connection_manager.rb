@@ -19,7 +19,7 @@ class Connection_Manager
   end
 
   def listen
-    self.conenction.listen    
+    self.connection.listen    
   end
 
   def receive_message(message)
