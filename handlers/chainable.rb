@@ -2,15 +2,22 @@
 
 module Chainable
 
-  def next_in_chain(link)
-    @next = link
+  def next_in_chain
+    nil
   end
 
-  def method_missing(method, *args, &block)
-    if @next == nil
-      puts "Mensagem inválida inválido!"
-      return
+  def handle_massage(method, *args, &block)
+    puts "opaa"
+    if self.respond_to?(method)
+      puts "entrando no handle_message do Chainable"
+      self.__send__(method, *args, &block)
+    else
+      if next_in_chain.nil?
+        puts "Mensagem inválida!"
+      else
+        next_in_chain.handle_massage(method, *args, &block)
+      end
     end
-    @next.__send__(method, *args, &block)
   end
+
 end

@@ -1,22 +1,13 @@
 # -*- encoding : utf-8 -*-
 
 class Library
-
-  attr_reader :librarians, :associates, :books
+  
   attr_accessor :librarians, :associates, :books
 
   def initialize(librarians, associates, books)
     @librarians = librarians
     @associates = associates
     @books = books
-  end
-
-  def librarians=(librarians)
-    @librarians = librarians
-  end
-
-  def associates=(associates)
-    @associates = associates
   end
 
   def new_librarian(librarian)

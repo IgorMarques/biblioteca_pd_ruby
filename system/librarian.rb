@@ -1,10 +1,10 @@
 # -*- encoding : utf-8 -*-
 
 class Librarian
-  attr_reader :name, :password
+  attr_reader :username, :password
 
   def initialize(name, password)
-    @name= name
+    @username= name
     @password = password
   end
 

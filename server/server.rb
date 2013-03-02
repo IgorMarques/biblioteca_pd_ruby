@@ -4,6 +4,8 @@ require_relative '../system/librarian'
 require_relative '../system/associate'
 require_relative '../system/book'
 require_relative '../system/library'
+require_relative '../handlers/login_handler'
+require_relative '../handlers/logoff_handler'
 
 class Server
 
@@ -11,15 +13,23 @@ class Server
   attr_accessor :port, :online_clients, :library
 
   #construtor
-  def initialize(port, online_clients="", library="")
+  def initialize(port, online_clients=nil, library="")
     @port = port
-    @online_clients = online_clients
+    @online_clients = []
     @library = library
 
   end
 
-  def online_clients=(online_clients)
-    @online_clients = online_clients 
+  def remove_online_client(username)
+
+    @online_clients.each do |client| 
+
+      if client.username == username
+        @online_clients.delete(client)
+        puts "--Usuário #{username} fez logoff."
+      end
+    end
+
   end
 
   def listen(port, protocol)
@@ -37,9 +47,9 @@ class Server
             
             message.string_to_message(line) 
 
-            puts line
+            handler = Login_Handler.new(Logoff_Handler.new)#(Loan_Handler.new(Devolution_Handler.new(Inform_Books.new))))
 
-            client.puts "oi"
+            handler.handle_massage(message.command, [message.params, self])
       
           end
           #client.close               
@@ -59,10 +69,37 @@ class Server
       end
   end
 
-  def validate_login(librarian)
+  def validate_login(username, password)
+
+    puts  "-Validando login do usuário #{username}"
+
+    librarians = @library.librarians
+
+    librarians.each do |librarian|
+
+      if (librarian.username == username) and (librarian.password == password)
+ 
+        online_clients= @online_clients
+
+        online_clients.each do |client|
+          if client.username == username
+            puts "-Usuário #{username} já está conectado. Recusando login"
+            return false
+          end
+        end
+        
+        self.online_clients.push(Librarian.new(username, password))
+        puts "--Novo cliente conectado! Username: #{username}, Senha: #{password}"
+        return 
+        ###FALTA RESPONDER
+      end
+    end
+
+    puts "--Usuário Username: #{username}, Senha: #{password} não existe no sistema."
   end
 
-  def validate_logoff(librarian)
+  def validate_logoff(username)
+    remove_online_client(username)  
   end
 
   def validate_loan(book, associate)

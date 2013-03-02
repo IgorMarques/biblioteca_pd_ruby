@@ -9,7 +9,7 @@ class TCP_connection
   end
 
   def send_message(message)
-    @socket.puts message#.to_string
+    @socket.puts message.to_string
   end
 
   def receive_message
