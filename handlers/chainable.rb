@@ -7,9 +7,9 @@ module Chainable
   end
 
   def handle_massage(method, *args, &block)
-    puts "opaa"
+
     if self.respond_to?(method)
-      puts "entrando no handle_message do Chainable"
+
       self.__send__(method, *args, &block)
     else
       if next_in_chain.nil?

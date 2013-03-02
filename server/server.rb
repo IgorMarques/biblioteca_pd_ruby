@@ -6,6 +6,7 @@ require_relative '../system/book'
 require_relative '../system/library'
 require_relative '../handlers/login_handler'
 require_relative '../handlers/logoff_handler'
+require_relative '../handlers/loan_book_handler'
 
 class Server
 
@@ -20,13 +21,14 @@ class Server
 
   end
 
-  def remove_online_client(username)
+  def remove_online_client(username, client)
 
-    @online_clients.each do |client| 
+    @online_clients.each do |user| 
 
-      if client.username == username
-        @online_clients.delete(client)
+      if user.username == username
+        @online_clients.delete(user)
         puts "--Usuário #{username} fez logoff."
+        client.puts "=> Você fez logoff com sucesso!"
       end
     end
 
@@ -47,9 +49,9 @@ class Server
             
             message.string_to_message(line) 
 
-            handler = Login_Handler.new(Logoff_Handler.new)#(Loan_Handler.new(Devolution_Handler.new(Inform_Books.new))))
+            handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new))#(Devolution_Handler.new(Inform_Books.new))))
 
-            handler.handle_massage(message.command, [message.params, self])
+            handler.handle_massage(message.command, [message.params, self, client])
       
           end
           #client.close               
@@ -69,7 +71,7 @@ class Server
       end
   end
 
-  def validate_login(username, password)
+  def validate_login(username, password, client)
 
     puts  "-Validando login do usuário #{username}"
 
@@ -83,26 +85,57 @@ class Server
 
         online_clients.each do |client|
           if client.username == username
-            puts "-Usuário #{username} já está conectado. Recusando login"
+            puts "--Usuário #{username} já está conectado. Recusando login"
+            client.puts "=> O usuário #{username} já está conectado! Tente login com outro usuário!"
             return false
           end
         end
         
         self.online_clients.push(Librarian.new(username, password))
         puts "--Novo cliente conectado! Username: #{username}, Senha: #{password}"
+        client.puts "=> Você foi conectado com sucesso!"
         return 
         ###FALTA RESPONDER
       end
     end
 
     puts "--Usuário Username: #{username}, Senha: #{password} não existe no sistema."
+    client.puts "=> Usuário Username: #{username}, Senha: #{password} não existe no sistema."
+
   end
 
-  def validate_logoff(username)
-    remove_online_client(username)  
+  def validate_logoff(username, client)
+    remove_online_client(username, client)  
   end
 
-  def validate_loan(book, associate)
+  def validate_loan(book, associate, client)
+    puts "--Tentando realizar empréstimo do livro: #{book} ao sócio: #{associate}"
+    
+    self.library.books.each do |library_book| 
+
+      if library_book.title == book
+
+        self.library.associates.each do |library_associate|
+
+          if library_associate.name == associate
+            puts "Emprestimo feito"
+            client.puts "=> Empréstimo feito!"
+            return
+          end
+
+        puts "-O sócio #{associate} não está cadastrado."
+        client.puts "=> O sócio #{associate} não está cadastrado!"
+        return
+
+        end
+
+      end
+    end
+
+    puts "-O livro #{book} não existe no acervo."
+    client.puts "=> O livro #{book} não existe no acervo!"
+    return
+
   end
 
   def validade_devolution(book, associate)

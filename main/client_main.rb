@@ -20,8 +20,18 @@ message= Message.new("C", "login", ["Igor", "password"])
 
 connection.send_message(message)
 
-message= Message.new("C", "logoffff", "Igor")
+puts connection.receive_message
 
-
+message= Message.new("C", "loan_book", ["Christine", "Huguinho"])
 
 connection.send_message(message)
+
+puts connection.receive_message
+
+message= Message.new("C", "logoff", "Igor")
+
+connection.send_message(message)
+
+puts connection.receive_message
+
+####FALTA ATUALIZAR QUANTIDADE DO LIVRO NO ESTOQUE#####
