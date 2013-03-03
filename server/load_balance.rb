@@ -49,8 +49,9 @@ class Load_Balance
     
   end
   def request_login(port, client)
-    puts"--Cliente solicitando servidor"
+    puts"-Cliente solicitando servidor"
     client.puts self.able_servers[0]
+    puts"--Cliente atendido"
   end
 
   def check_server_down()

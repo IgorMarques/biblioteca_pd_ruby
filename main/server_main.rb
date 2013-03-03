@@ -35,7 +35,7 @@ destiny =7889
 protocol = "TCP"
 hostname = "localhost"
 
-puts "-Criando servidor"
+puts "-Criando Servidor"
 server = Server.new(port, "" ,library)
 
 puts "-Criando conexão"

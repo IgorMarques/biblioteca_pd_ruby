@@ -15,7 +15,7 @@ hostname = "localhost"
 book = "Christine"
 associate= "Huguinho"
 
-puts "-Criando cliente"
+puts "-Criando Cliente"
 client = Client.new(origin_port, bibliotecario, destiny_port)
 
 puts "-Criando conexão"
