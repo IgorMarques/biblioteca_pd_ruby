@@ -35,18 +35,16 @@ destiny =7889
 protocol = "TCP"
 hostname = "localhost"
 
+puts "-Criando servidor"
 server = Server.new(port, "" ,library)
 
-#connection = Connection_Manager.new(port, protocol, hostname)
-
+puts "-Criando conexão"
 connection = Connection_Manager.new(7889, protocol, hostname)
 
-message = Message.new("S","notify_apitude",port.to_s)
-connection.send_message(message)
+puts "-Notificando aptidão ao Balanceador de Carga"
+server.notify_aptitude(connection)
 
-puts connection.receive_message
-puts connection.receive_message
-
+puts "-Ouvindo clientes"
 server.listen(port, protocol)
 
 #server.notify_aptitude(7888)

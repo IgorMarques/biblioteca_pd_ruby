@@ -9,36 +9,31 @@ bibliotecario = Librarian.new("Igor", "password")
 
 origin_port = 7891
 destiny_port = 7889
-#destiny_port = 7890
+
 protocol = "TCP"
 hostname = "localhost"
+book = "Christine"
+associate= "Huguinho"
 
-client = Client.new(origin_port, bibliotecario)
+puts "-Criando cliente"
+client = Client.new(origin_port, bibliotecario, destiny_port)
 
-connection = Connection_Manager.new(destiny_port, protocol, hostname)
-message= Message.new("C", "request_login","0")
+puts "-Criando conexão"
+connection = Connection_Manager.new(client.destiny_port, protocol, hostname)
 
-connection.send_message(message)
-destiny_port= connection.receive_message[0..-2]
+puts "-Criando solicitando servidor ao Balanceador de Carga"
+client.request_login(connection)
 
-connection = Connection_Manager.new(destiny_port, protocol, hostname)
+puts "-Conectando ao servidor informado"
+connection = Connection_Manager.new(client.destiny_port, protocol, hostname)
 
-message= Message.new("C", "login", ["Igor", "password"])
+puts "-Logando bibliotecário"
+client.login(connection, bibliotecario.username, bibliotecario.password)
 
-connection.send_message(message)
+puts "-Relizando empréstimo"
+client.loan_book(connection, book, associate)
 
-puts connection.receive_message
+puts "-Fazendo logoff"
+client.logoff(connection, bibliotecario.username)
 
-message= Message.new("C", "loan_book", ["Christine", "Huguinho"])
-
-connection.send_message(message)
-
-puts connection.receive_message
-
-message= Message.new("C", "logoff", "Igor")
-
-connection.send_message(message)
-
-puts connection.receive_message
-
-####FALTA ATUALIZAR QUANTIDADE DO LIVRO NO ESTOQUE#####
+puts "==Fim=="

@@ -179,9 +179,12 @@ class Server
   def get_backup()
   end
 
-  def notify_aptitude(port, connection)
-    message = Message.new("S","notify_apitude",port)
+  def notify_aptitude(connection)
+    message = Message.new("S","notify_apitude",port.to_s)
     connection.send_message(message)
+
+    puts connection.receive_message
+    puts connection.receive_message
   end
 
   def notify_overload()

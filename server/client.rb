@@ -4,26 +4,68 @@ require_relative '../system/librarian'
 
 class Client
 
-  attr_reader :port, :librarian
-  attr_accessor :port, :librarian
+  attr_reader :port, :librarian, :destiny_port
+  attr_accessor :port, :librarian, :destiny_port
 
   #construtor
-  def initialize(port, librarian)
+  def initialize(port, librarian, destiny_port)
     @port = port
     @librarian = librarian
+    @destiny_port = destiny_port
+  end
+=begin
+  
+message= Message.new("C", "login", ["Igor", "password"])
 
+connection.send_message(message)
+
+puts connection.receive_message
+
+message= Message.new("C", "loan_book", ["Christine", "Huguinho"])
+
+connection.send_message(message)
+
+puts connection.receive_message
+
+message= Message.new("C", "logoff", "Igor")
+
+connection.send_message(message)
+
+puts connection.receive_message
+=end
+
+  def request_login(connection)
+    message= Message.new("C", "request_login","0")
+    connection.send_message(message)
+    @destiny_port= connection.receive_message[0..-2]
   end
 
-  def login (server)
+  def login (connection, login, senha)
+
+    message= Message.new("C", "login", [login, senha])
+
+    connection.send_message(message)
+
+    puts connection.receive_message
   end
 
-  def logoff
+  def logoff(connection, username)
+    message= Message.new("C", "logoff", username)
+
+    connection.send_message(message)
+
+    puts connection.receive_message
   end
 
   def update_amout(amount, book)
   end
 
-  def validate_loan(book, associate)
+  def loan_book(connection, book, associate)
+    message= Message.new("C", "loan_book", [book, associate])
+
+    connection.send_message(message)
+
+    puts connection.receive_message
   end
 
   def validade_devolution(book, associate)
