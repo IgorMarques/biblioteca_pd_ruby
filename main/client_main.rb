@@ -5,9 +5,29 @@ require_relative '../network/connection_manager'
 require_relative '../server/client'
 require_relative '../network/message'
 
-bibliotecario = Librarian.new("Igor", "password")
+puts "=======CLIENTE========"
+username= "Igor"
+password= "password"
+origin_port= 7891
+protocol = "TCP"
 
-origin_port = 7891
+=begin
+puts"- Porta:"
+origin_port = gets 
+puts"- Nome de usuário:"
+username = gets 
+username = username[0..-2]
+
+
+puts"- Senha:"
+password = gets 
+puts"- Protocolo:"
+protocol = gets 
+=end 
+
+bibliotecario = Librarian.new(username, password)
+
+#origin_port = 7891
 destiny_port = 7889
 
 protocol = "TCP"
@@ -33,7 +53,12 @@ client.login(connection, bibliotecario.username, bibliotecario.password)
 puts "-Relizando empréstimo"
 client.loan_book(connection, book, associate)
 
+loop{
+
+}
+
 puts "-Fazendo logoff"
 client.logoff(connection, bibliotecario.username)
+
 
 puts "==Fim=="

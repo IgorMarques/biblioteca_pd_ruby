@@ -8,17 +8,47 @@ require_relative '../handlers/login_handler'
 require_relative '../handlers/logoff_handler'
 require_relative '../handlers/loan_book_handler'
 require_relative '../network/message'
+require_relative '../network/connection_manager'
+
 
 class Server
 
+  #@connection = Connection_Manager.new(7889, protocol, hostname)
+
   attr_reader :port, :online_clients, :library
-  attr_accessor :port, :online_clients, :library
+  attr_accessor :port, :online_clients, :library, :max_clients
 
   #construtor
-  def initialize(port, online_clients=nil, library="")
+  def initialize(port, online_clients=nil, library="", max_clients, lb)
+   
+    destiny =7889
+    protocol = "TCP"
+    hostname = "localhost"
+
     @port = port
     @online_clients = []
     @library = library
+    @max_clients = max_clients
+    @load_balance = lb
+    @connection = Connection_Manager.new(7889, protocol, hostname)
+
+  end
+
+  def notify_aptitude#(connection)
+    message = Message.new("S","notify_apitude",port.to_s)
+    @connection.send_message(message)
+
+    puts  @connection.receive_message
+    puts  @connection.receive_message
+  end
+
+  def notify_overload()
+
+    message = Message.new("S","notify_overload", port.to_s)
+    
+    @connection.send_message(message)
+
+    puts @connection.receive_message
 
   end
 
@@ -96,27 +126,37 @@ class Server
 
         online_clients.each do |client|
           if client.username == username
-            puts "--Usuário #{username} já está conectado. Recusando login"
+            puts "--Usuário #{username} já está conectado. Recusando login\n"
             client.puts "=> O usuário #{username} já está conectado! Tente login com outro usuário!"
             return false
           end
         end
         
+
+
         self.online_clients.push(Librarian.new(username, password))
-        puts "--Novo cliente conectado! Username: #{username}, Senha: #{password}"
+        puts "--Novo cliente conectado! Username: #{username}, Senha: #{password}\n"
+        
+        puts "\n-Clientes conectados: " 
+        puts online_clients.length 
+
+        if online_clients.length == @max_clients
+          self.notify_overload()
+        end
+
         client.puts "=> Você foi conectado com sucesso!"
         return 
-        ###FALTA RESPONDER
+        
       end
     end
 
-    puts "--Usuário Username: #{username}, Senha: #{password} não existe no sistema."
+    puts "--Usuário Username: #{username}, Senha: #{password} não existe no sistema.\n"
     client.puts "=> Usuário Username: #{username}, Senha: #{password} não existe no sistema."
 
   end
 
   def validate_logoff(username, client)
-    puts "--Tentando realizar logoff do usuário #{username}"
+    puts "-Tentando realizar logoff do usuário #{username}"
 
     if remove_online_client(username)
       client.puts "=> Logoff realizado com sucesso." 
@@ -130,8 +170,6 @@ class Server
     i=0
     self.library.books.each do |library_book| 
 
-     
-
       if library_book.title == book
 
         if library_book.stock_amount > 0
@@ -144,17 +182,17 @@ class Server
               @library.books[i].lent_amount = new_amount
 
               puts "--Emprestimo feito"
-              puts "--A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}"
+              puts "--A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}\n"
               client.puts "=> Empréstimo feito com sucesso! A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}"
              return
             end
 
-            puts "-O sócio #{associate} não está cadastrado."
+            puts "-O sócio #{associate} não está cadastrado.\n"
             client.puts "=> O sócio #{associate} não está cadastrado!"
             return
           end
         else
-          puts "--Quantidade de livros em estoque insuficientes para completar o empréstimo."
+          puts "--Quantidade de livros em estoque insuficientes para completar o empréstimo.\n"
           client.puts "=> O empréstimo não pode ser realizado. Quantidade de livros em estoque insuficientes para completar o empréstimo."
           return
         end
@@ -164,10 +202,9 @@ class Server
     i= i+1
     end
 
-    puts "-O livro #{book} não existe no acervo."
+    puts "-O livro #{book} não existe no acervo.\n"
     client.puts "=> O livro #{book} não existe no acervo!"
     return
-
   end
 
   def validade_devolution(book, associate)
@@ -177,17 +214,6 @@ class Server
   end
 
   def get_backup()
-  end
-
-  def notify_aptitude(connection)
-    message = Message.new("S","notify_apitude",port.to_s)
-    connection.send_message(message)
-
-    puts connection.receive_message
-    puts connection.receive_message
-  end
-
-  def notify_overload()
   end
 
   def notify_shutdown()

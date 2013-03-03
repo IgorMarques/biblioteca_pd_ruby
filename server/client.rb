@@ -13,26 +13,6 @@ class Client
     @librarian = librarian
     @destiny_port = destiny_port
   end
-=begin
-  
-message= Message.new("C", "login", ["Igor", "password"])
-
-connection.send_message(message)
-
-puts connection.receive_message
-
-message= Message.new("C", "loan_book", ["Christine", "Huguinho"])
-
-connection.send_message(message)
-
-puts connection.receive_message
-
-message= Message.new("C", "logoff", "Igor")
-
-connection.send_message(message)
-
-puts connection.receive_message
-=end
 
   def request_login(connection)
     message= Message.new("C", "request_login","0")

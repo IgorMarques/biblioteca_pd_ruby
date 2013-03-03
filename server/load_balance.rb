@@ -3,9 +3,8 @@
 
 require_relative '../handlers/aptitude_handler'
 require_relative '../handlers/request_login_handler'
+require_relative '../handlers/overload_handler'
 require_relative '../network/message'
-#require_relative '../handlers/logoff_handler'
-#require_relative '../handlers/loan_book_handler'
 
 class Load_Balance
 
@@ -34,7 +33,7 @@ class Load_Balance
             
             message.string_to_message(line)
 
-            handler = Apitude_Handler.new(Request_Login_Handler.new)
+            handler = Apitude_Handler.new(Request_Login_Handler.new(Overload_Handler.new))
 
             handler.handle_massage(message.command, [message.params, self, client])
       
@@ -69,6 +68,13 @@ class Load_Balance
     puts "-Servidor de porta #{port} adicionado com sucesso a lista de servidores"
     server.puts "~> Você foi adicionado com sucesso a lista de servidores do LB."
     self.update_able_servers(port, server)
+  end
+
+  def remove_able_server (port,server)
+    puts "caiu aqui"
+    self.able_servers.delete(port)
+    puts "-Servidor de porta #{port} REMOVIDO com sucesso a lista de servidores aptos"
+    server.puts "~> Você foi removido da lista de servidores do LB."
   end
 
 end
