@@ -21,16 +21,19 @@ class Server
 
   end
 
-  def remove_online_client(username, client)
+  def remove_online_client(username)
 
-    @online_clients.each do |user| 
+    @online_clients.each do |client| 
 
-      if user.username == username
-        @online_clients.delete(user)
+      if client.username == username
+        @online_clients.delete(client)
         puts "--Usuário #{username} fez logoff."
-        client.puts "=> Você fez logoff com sucesso!"
+        return true
       end
+
     end
+
+    return false
 
   end
 
@@ -105,31 +108,52 @@ class Server
   end
 
   def validate_logoff(username, client)
-    remove_online_client(username, client)  
+    puts "--Tentando realizar logoff do usuário #{username}"
+
+    if remove_online_client(username)
+      client.puts "=> Logoff realizado com sucesso." 
+    else
+      client.puts "=> Logoff nao pode ser realizado com sucesso." 
+    end 
   end
 
   def validate_loan(book, associate, client)
-    puts "--Tentando realizar empréstimo do livro: #{book} ao sócio: #{associate}"
-    
+    puts "-Tentando realizar empréstimo do livro: #{book} ao sócio: #{associate}"
+    i=0
     self.library.books.each do |library_book| 
+
+     
 
       if library_book.title == book
 
-        self.library.associates.each do |library_associate|
+        if library_book.stock_amount > 0
 
-          if library_associate.name == associate
-            puts "Emprestimo feito"
-            client.puts "=> Empréstimo feito!"
+          self.library.associates.each do |library_associate|
+
+            if library_associate.name == associate
+    
+              new_amount= @library.books[i].lent_amount + 1
+              @library.books[i].lent_amount = new_amount
+
+              puts "--Emprestimo feito"
+              puts "--A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}"
+              client.puts "=> Empréstimo feito com sucesso! A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}"
+             return
+            end
+
+            puts "-O sócio #{associate} não está cadastrado."
+            client.puts "=> O sócio #{associate} não está cadastrado!"
             return
           end
-
-        puts "-O sócio #{associate} não está cadastrado."
-        client.puts "=> O sócio #{associate} não está cadastrado!"
-        return
-
+        else
+          puts "--Quantidade de livros em estoque insuficientes para completar o empréstimo."
+          client.puts "=> O empréstimo não pode ser realizado. Quantidade de livros em estoque insuficientes para completar o empréstimo."
+          return
         end
 
       end
+
+    i= i+1
     end
 
     puts "-O livro #{book} não existe no acervo."
