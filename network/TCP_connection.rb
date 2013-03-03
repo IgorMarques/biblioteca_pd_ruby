@@ -5,11 +5,23 @@ require 'socket'
 class TCP_connection
 
   def initialize (port, hostname)
-    @socket = TCPSocket.open(hostname, port)
+    loop{
+      begin 
+        @socket = TCPSocket.open(hostname, port)
+        break
+      rescue
+        puts "\n-Impossível se conectar ao sistema: Host não encontrado."
+        sleep(2)
+      end
+    }
   end
 
   def send_message(message)
-    @socket.puts message.to_string
+    begin
+      @socket.puts message.to_string
+    rescue
+      puts "\n-A mensagem não pode ser enviada. Tente novamente.\n"
+    end
   end
 
   def receive_message
