@@ -71,7 +71,6 @@ class Load_Balance
   end
 
   def remove_able_server (port,server)
-    puts "caiu aqui"
     self.able_servers.delete(port)
     puts "-Servidor de porta #{port} REMOVIDO com sucesso a lista de servidores aptos"
     server.puts "~> Você foi removido da lista de servidores do LB."
