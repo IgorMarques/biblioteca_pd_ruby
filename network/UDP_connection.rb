@@ -10,7 +10,7 @@ class UDP_connection
   end
 
   def send_message(message)
-    @socket.send(message, 0, '127.0.0.1', @port)
+    @socket.send(message.to_string, 0, '127.0.0.1', @port)
   end
 
   def receive_message

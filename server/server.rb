@@ -7,6 +7,7 @@ require_relative '../system/library'
 require_relative '../handlers/login_handler'
 require_relative '../handlers/logoff_handler'
 require_relative '../handlers/loan_book_handler'
+require_relative '../network/message'
 
 class Server
 
@@ -62,13 +63,20 @@ class Server
       }
       elsif protocol == "UDP"
 
-        ##falta implementar multithread##
         client = UDPSocket.new
         client.bind('0.0.0.0', @port)
-        data, addr = client.recvfrom(@port) # if this number is too low it will drop the larger packets and never give them to you
-        
-        puts data
+        loop{
+          data, addr = client.recvfrom(@port) 
+          
+          message= Message.new
+            
+          message.string_to_message(data) 
 
+          handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new))#(Devolution_Handler.new(Inform_Books.new))))
+
+          handler.handle_massage(message.command, [message.params, self, client])
+      
+        }
       else 
         puts "--Protocolo inválido!--"
       end
@@ -171,7 +179,9 @@ class Server
   def get_backup()
   end
 
-  def notify_aptitude()
+  def notify_aptitude(port, connection)
+    message = Message.new("S","notify_apitude",port)
+    connection.send_message(message)
   end
 
   def notify_overload()

@@ -8,11 +8,18 @@ require_relative '../network/message'
 bibliotecario = Librarian.new("Igor", "password")
 
 origin_port = 7891
-destiny_port = 7890
+destiny_port = 7889
+#destiny_port = 7890
 protocol = "TCP"
 hostname = "localhost"
 
 client = Client.new(origin_port, bibliotecario)
+
+connection = Connection_Manager.new(destiny_port, protocol, hostname)
+message= Message.new("C", "request_login","0")
+
+connection.send_message(message)
+destiny_port= connection.receive_message[0..-2]
 
 connection = Connection_Manager.new(destiny_port, protocol, hostname)
 

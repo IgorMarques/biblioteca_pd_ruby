@@ -31,12 +31,21 @@ library = Library.new(bibliotecarios,socios,livros)
 #fim dos Instanciadores do "banco de dados"
 
 port = 7890
+destiny =7889
 protocol = "TCP"
 hostname = "localhost"
 
 server = Server.new(port, "" ,library)
 
 #connection = Connection_Manager.new(port, protocol, hostname)
+
+connection = Connection_Manager.new(7889, protocol, hostname)
+
+message = Message.new("S","notify_apitude",port.to_s)
+connection.send_message(message)
+
+puts connection.receive_message
+puts connection.receive_message
 
 server.listen(port, protocol)
 
