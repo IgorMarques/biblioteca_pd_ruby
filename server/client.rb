@@ -48,22 +48,39 @@ class Client
     puts connection.receive_message
   end
 
-  def validade_devolution(book, associate)
+  def inform_books_associate(connection, associate)
+    message= Message.new("C", "inform_books", associate)
+
+    connection.send_message(message)
+
+    puts connection.receive_message
+    puts connection.receive_message
+    puts connection.receive_message
+    puts connection.receive_message
+
   end
 
-  def inform_books_associate(associate)
+  def return_book_associate(connection, book, associate)
+
+
   end
 
-  def get_backup()
+  def return_book(connection, associate)
+    puts "--Realizando devolução de livro"
+    puts "---Verificando livros em posse do usuário #{associate}"
+    self.inform_books_associate(connection, associate)
+
+    puts "--Informe o livro que deseja retornar"
+    book = gets 
+
+    puts "---Devolvendo livro #{book}"
+
+    message= Message.new("C", "return_book", [associate, book])
+
+    connection.send_message(message)
+
+    puts connection.receive_message
   end
 
-  def notify_aptitude()
-  end
-
-  def notify_overload()
-  end
-
-  def notify_shutdown()
-  end
 end
 

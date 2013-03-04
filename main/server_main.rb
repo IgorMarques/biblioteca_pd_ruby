@@ -8,7 +8,7 @@ require_relative '../network/connection_manager'
 require_relative '../server/server'
 
 #Instanciadores do "banco de dados"
-bibliotecario1 = Librarian.new("Mayane", "password")
+bibliotecario1 = Librarian.new("Marcia", "password")
 bibliotecario2 = Librarian.new("Igor", "password")
 bibliotecario3 = Librarian.new("Joaquim", "password")
 
@@ -20,8 +20,8 @@ livro3 = Book.new("The Shining", 40, 0)
 
 livros = [livro1, livro2, livro3]
 
-socio1 = Associate.new("Huguinho", livros)
-socio2 = Associate.new("Zezinho", "Nenhum")
+socio1 = Associate.new("Huguinho", [livro1, livro3])
+socio2 = Associate.new("Zezinho", [livro2, livro1])
 socio3 = Associate.new("Luizinho", livro1)
 
 socios= [socio1,socio2, socio3]
@@ -41,7 +41,7 @@ puts "-Porta:"
 port= gets.to_i
 
 puts "\n-Criando Servidor"
-server = Server.new(port, "" ,library, 1, 7889)
+server = Server.new(port, "" ,library, 2, 7889)
 
 puts "\n-Criando conexão"
 #connection = Connection_Manager.new(7889, protocol, hostname)

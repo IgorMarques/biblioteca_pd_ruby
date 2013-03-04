@@ -7,6 +7,8 @@ require_relative '../system/library'
 require_relative '../handlers/login_handler'
 require_relative '../handlers/logoff_handler'
 require_relative '../handlers/loan_book_handler'
+require_relative '../handlers/inform_book_handler'
+require_relative '../handlers/return_book_handler'
 require_relative '../network/message'
 require_relative '../network/connection_manager'
 
@@ -83,7 +85,9 @@ class Server
             
             message.string_to_message(line) 
 
-            handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new))#(Devolution_Handler.new(Inform_Books.new))))
+            #print message.params
+
+            handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new(Inform_Book_Handler.new(Return_Book_Handler.new))))
 
             handler.handle_massage(message.command, [message.params, self, client])
       
@@ -102,7 +106,7 @@ class Server
             
           message.string_to_message(data) 
 
-          handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new))#(Devolution_Handler.new(Inform_Books.new))))
+          handler = Login_Handler.new(Logoff_Handler.new(Loan_Book_Handler.new(Inform_Book_Handler.new(Return_Book_Handler.new))))#(Devolution_Handler.new(Inform_Books.new))))
 
           handler.handle_massage(message.command, [message.params, self, client])
       
@@ -165,6 +169,25 @@ class Server
     end 
   end
 
+  def loan_book(associate, book)
+  
+   i=0
+
+   self.library.associates.each do |lib_associate|
+
+    if lib_associate.name == associate
+
+      new_book = Book.new(book,0,0)
+
+      self.library.associates[i].books.push(new_book)
+    end
+
+    i= i+1
+
+    end
+
+  end
+
   def validate_loan(book, associate, client)
     puts "-Tentando realizar empréstimo do livro: #{book} ao sócio: #{associate}"
     i=0
@@ -180,6 +203,8 @@ class Server
     
               new_amount= @library.books[i].lent_amount + 1
               @library.books[i].lent_amount = new_amount
+
+              self.loan_book(associate, book)
 
               puts "--Emprestimo feito"
               puts "--A quantidade do livro #{book} disponível para empréstimo agora é #{@library.books[i].stock_amount}\n"
@@ -210,7 +235,59 @@ class Server
   def validade_devolution(book, associate)
   end
 
-  def inform_books_associate(associate)
+  def inform_books_associate(associate, client)
+
+    i=0
+
+    resultado = []
+
+    self.library.associates.each do |lib_associate|
+
+      if lib_associate.name == associate
+
+        self.library.associates[i].books.each do |book|
+
+          resultado << book.title
+        end
+
+      end
+
+    i= i+ 1
+    end 
+
+    client.puts "=>O sócio #{associate} possui os seguintes livros em posse" 
+
+    client.puts resultado
+
+  end
+
+  def return_book(associate, book, client)
+
+    puts "-Devolvendo livro #{book} locado por #{associate}"
+    i=0
+    self.library.associates.each do | lib_associate |
+
+      if lib_associate.name == associate
+              
+          lib_associate.books.each do |a_book| 
+                  
+            if a_book.title == book
+            
+              new_book = Book.new(book, 0, 0)
+            
+              @library.associates[i].books.delete(new_book)
+
+              puts "--Livro devolvido com sucesso!"
+
+              client.puts "=> Livro devolvido com sucesso!"
+            end
+
+          end
+
+      end
+
+      i=i+1
+    end 
   end
 
   def get_backup()

@@ -40,22 +40,26 @@ associate= "Huguinho"
 puts "-Criando Cliente"
 client = Client.new(origin_port, bibliotecario, destiny_port)
 
-puts "-Criando conexão"
+puts "\n-Criando conexão"
 connection = Connection_Manager.new(client.destiny_port, protocol, hostname)
 
-puts "-Criando solicitando servidor ao Balanceador de Carga"
+puts "\n-Criando solicitando servidor ao Balanceador de Carga"
 client.request_login(connection)
 
-puts "-Conectando ao servidor informado"
+puts "\n-Conectando ao servidor informado"
+
 connection = Connection_Manager.new(client.destiny_port, protocol, hostname)
 
-puts "-Logando bibliotecário"
+puts "\n-Logando bibliotecário"
 client.login(connection, bibliotecario.username, bibliotecario.password)
 
-puts "-Relizando empréstimo"
+puts "\n-Relizando empréstimo"
 client.loan_book(connection, book, associate)
 
-puts "\n-Pressiona qualquer tecla para fazer logoff."
+puts "\n-Realizando devolução"
+client.return_book(connection, associate)
+
+puts "\n-Pressione qualquer tecla para fazer logoff."
 loop{
   if gets
     puts "-Fazendo logoff"
